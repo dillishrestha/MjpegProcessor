@@ -22,7 +22,7 @@ before_build:
   - nuget restore
   
 build:
-  project: MjpegProcessor.sln
+  project: src\MjpegProcessor.sln
 
 after_build:
   - ps: .\nuget\pack.ps1

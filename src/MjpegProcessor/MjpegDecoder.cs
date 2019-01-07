@@ -4,7 +4,7 @@ using System.Net;
 using System.Text;
 using System.Threading;
 
-namespace MjpegProcessor
+namespace DotNetProjects.MjpegProcessor
 {
     public class MjpegDecoder
     {
@@ -145,54 +145,5 @@ namespace MjpegProcessor
                     FrameReady?.Invoke(this, new FrameReadyEventArgs(CurrentFrame));
                 }, null);
         }                                
-    }
-
-    internal static class Extensions
-    {
-        public static int Find(this byte[] buff, byte[] search)
-        {
-            // enumerate the buffer but don't overstep the bounds
-            for(int start = 0; start < buff.Length - search.Length; start++)
-            {
-                // we found the first character
-                if(buff[start] == search[0])
-                {
-                    int next;
-
-                    // traverse the rest of the bytes
-                    for(next = 1; next < search.Length; next++)
-                    {
-                        // if we don't match, bail
-                        if(buff[start+next] != search[next])
-                            break;
-                    }
-
-                    if(next == search.Length)
-                        return start;
-                }
-            }
-            // not found
-            return -1;	
-        }
-    }
-
-    public class FrameReadyEventArgs : EventArgs
-    {
-        public byte[] FrameBuffer { get; }
-
-        public FrameReadyEventArgs(byte[] buffer)
-        {
-            FrameBuffer = buffer;
-        }
-    }
-
-    public class ErrorEventArgs : EventArgs
-    {
-        public string Message { get; }
-
-        public ErrorEventArgs(string message)
-        {
-            Message = message;
-        }
     }
 }
