@@ -2,6 +2,28 @@
 
   <PropertyGroup>
     <TargetFrameworks>net45</TargetFrameworks>
+    <AssemblyName>DotNetProjects.MjpegProcessor</AssemblyName>
+    <RootNamespace>DotNetProjects.MjpegProcessor</RootNamespace>
+    <PackageId>DotNetProjects.MjpegProcessor</PackageId>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
+    <AssemblyVersion>2.0.0.0</AssemblyVersion>
+    <FileVersion>2.0.0.0</FileVersion>
+    <Version>2.0</Version>
+    <Description>A C# implementation of MJPEG</Description>
+    <Product>DotNetProjects.MjpegProcessor.dll</Product>
+    <Authors>DotNetProjects.MjpegProcessor</Authors>
+  </PropertyGroup>
+  
+  <ItemGroup Label="dotnet pack instructions">
+    <Content Include="$(OutputPath)/net45/DotNetProjects.MjpegProcessor.pdb">
+      <Pack>true</Pack>
+      <PackagePath>lib/net45</PackagePath>
+    </Content>
+  </ItemGroup>
+  
+  <PropertyGroup>
+    <DebugType>full</DebugType>
+    <DebugSymbols>true</DebugSymbols>
   </PropertyGroup>
 
 </Project>
