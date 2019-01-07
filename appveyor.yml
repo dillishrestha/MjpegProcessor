@@ -24,9 +24,6 @@ before_build:
 build:
   project: src\MjpegProcessor.sln
 
-after_build:
-  - ps: .\nuget\pack.ps1
-  
 test: off
 
 artifacts:
