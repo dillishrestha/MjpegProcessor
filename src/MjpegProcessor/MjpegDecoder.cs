@@ -52,14 +52,16 @@ namespace MjpegProcessor
             // get the response
             var req = (HttpWebRequest)asyncResult.AsyncState;
 
+            HttpWebResponse resp = null;
             try
             {
-                HttpWebResponse resp = (HttpWebResponse)req.EndGetResponse(asyncResult);
+                resp = (HttpWebResponse) req.EndGetResponse(asyncResult);
 
                 // find our magic boundary value
                 string contentType = resp.Headers["Content-Type"];
-                if(!string.IsNullOrEmpty(contentType) && !contentType.Contains("="))
-                    throw new Exception("Invalid content-type header.  The camera is likely not returning a proper MJPEG stream.");
+                if (!string.IsNullOrEmpty(contentType) && !contentType.Contains("="))
+                    throw new Exception(
+                        "Invalid content-type header.  The camera is likely not returning a proper MJPEG stream.");
 
                 string boundary = resp.Headers["Content-Type"].Split('=')[1].Replace("\"", "");
                 byte[] boundaryBytes = Encoding.UTF8.GetBytes(boundary.StartsWith("--") ? boundary : "--" + boundary);
@@ -76,19 +78,19 @@ namespace MjpegProcessor
                     // find the JPEG header
                     int imageStart = buff.Find(JpegHeader);
 
-                    if(imageStart != -1)
+                    if (imageStart != -1)
                     {
                         // copy the start of the JPEG image to the imageBuffer
                         int size = buff.Length - imageStart;
                         Array.Copy(buff, imageStart, imageBuffer, 0, size);
 
-                        while(true)
+                        while (true)
                         {
                             buff = br.ReadBytes(ChunkSize);
 
                             // find the boundary text
                             int imageEnd = buff.Find(boundaryBytes);
-                            if(imageEnd != -1)
+                            if (imageEnd != -1)
                             {
                                 // copy the remainder of the JPEG to the imageBuffer
                                 Array.Copy(buff, 0, imageBuffer, size, imageEnd);
@@ -115,12 +117,15 @@ namespace MjpegProcessor
                         }
                     }
                 }
-
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
-                if(Error != null)
+                if (Error != null)
                     _context.Post(delegate { Error(this, new ErrorEventArgs(ex.Message)); }, null);
+            }
+            finally
+            {
+                resp?.Dispose();
             }
         }
 
@@ -130,8 +135,7 @@ namespace MjpegProcessor
             _context.Post(delegate
                 {
                     // tell whoever's listening that we have a frame to draw
-                    if(FrameReady != null)
-                        FrameReady(this, new FrameReadyEventArgs(CurrentFrame));
+                    FrameReady?.Invoke(this, new FrameReadyEventArgs(CurrentFrame));
                 }, null);
         }                                
     }
