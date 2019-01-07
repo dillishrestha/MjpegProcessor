@@ -19,7 +19,7 @@ dotnet_csproj:
 configuration: Debug
 
 before_build:
-  - nuget restore
+  - nuget restore src
   
 build:
   project: src\MjpegProcessor.sln
