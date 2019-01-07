@@ -34,8 +34,15 @@ namespace MjpegProcessor
 
         public void ParseStream(Uri uri)
         {
-            var request = (HttpWebRequest)WebRequest.Create(uri);
-            
+            ParseStream(uri, null, null);
+        }
+
+        public void ParseStream(Uri uri, string username, string password)
+        {
+            HttpWebRequest request = (HttpWebRequest)WebRequest.Create(uri);
+            if (!string.IsNullOrEmpty(username) || !string.IsNullOrEmpty(password))
+                request.Credentials = new NetworkCredential(username, password);
+
             // asynchronously get a response
             request.BeginGetResponse(OnGetResponse, request);
         }
