@@ -13,12 +13,11 @@
     <Product>DotNetProjects.MjpegProcessor.dll</Product>
     <Authors>DotNetProjects.MjpegProcessor</Authors>
   </PropertyGroup>
-  
-  <ItemGroup Label="dotnet pack instructions">
-    <Content Include="$(OutputPath)/net45/DotNetProjects.MjpegProcessor.pdb">
-      <Pack>true</Pack>
-      <PackagePath>lib/net45</PackagePath>
-    </Content>
+
+  <ItemGroup>
+    <Compile Remove="bin\**" />
+    <EmbeddedResource Remove="bin\**" />
+    <None Remove="bin\**" />
   </ItemGroup>
   
   <ItemGroup>
